@@ -1,0 +1,33 @@
+version: '3'
+services:
+
+  django-backend:
+    build:
+      dockerfile: ./Django_App.dockerfile 
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    depends_on:
+      neo4j-db:
+        condition: service_healthy
+
+    environment:
+      NEO4J_BOLT_URL: bolt://neo4j:pass@neo4j-db:7687
+  
+  neo4j-db:
+    build:
+      dockerfile: ./NeoDB.dockerfile 
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - ${HOME}/neo4j-compose2/data:/data
+    environment:
+        - NEO4J_AUTH=none
+
+    healthcheck:
+        test: ["CMD", "curl", "-f", "localhost:7474"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
+  

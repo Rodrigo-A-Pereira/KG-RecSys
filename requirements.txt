@@ -1,0 +1,11 @@
+pip
+wheel
+mtgsdk
+django
+djangorestframework
+beautifulsoup4
+django-cors-headers
+django-neomodel
+neomodel
+requests
+names
