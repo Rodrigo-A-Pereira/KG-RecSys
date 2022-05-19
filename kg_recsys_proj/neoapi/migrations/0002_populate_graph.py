@@ -88,7 +88,7 @@ def populate_db(apps, schema_editor):
 
             try:
                 person = Person.nodes.get(name=p_names[i])
-            except neomodel.DoesNotExist:
+            except neomodel.core.DoesNotExist:
                 person = Person(name=p_names[i]).save()
 
             for card in card_list:

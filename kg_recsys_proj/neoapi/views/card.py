@@ -1,6 +1,8 @@
 from rest_framework import viewsets
 from neoapi.serializer import CardSerializerNeo, PersonSerializerNeo
 from neoapi.models import Card, Person
+from django.http import Http404
+import neomodel
 
 class CardViewSet(viewsets.ModelViewSet):
     serializer_class = CardSerializerNeo
@@ -15,7 +17,12 @@ class CardViewSet(viewsets.ModelViewSet):
             return Card.nodes.all()
 
     def get_object(self):
-        return Card.nodes.get(code=self.kwargs[self.lookup_field])
+        try:
+            return Card.nodes.get(code=self.kwargs[self.lookup_field])
+        except neomodel.core.DoesNotExist:
+            raise Http404
+
+
 
 class PersonViewSet(viewsets.ModelViewSet):
     serializer_class = PersonSerializerNeo
@@ -24,3 +31,7 @@ class PersonViewSet(viewsets.ModelViewSet):
 
     def get_object(self):
         return Person.nodes.get(uid=self.kwargs[self.lookup_field])
+
+
+
+

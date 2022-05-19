@@ -42,10 +42,15 @@ INSTALLED_APPS = [
     'django_neomodel',
     'neoapi.apps.NeoapiConfig',
     'rest_framework',
+    'corsheaders',
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8080",
 ]
 
 # Get NEO4J_BOLT_URL environment variable, if none exits use default bolt://neo4j:neo4j@localhost:7687
-NEOMODEL_NEO4J_BOLT_URL = os.environ.get('NEO4J_BOLT_URL','bolt://neo4j:pass@localhost:7687')
+NEOMODEL_NEO4J_BOLT_URL = os.environ.get('NEO4J_BOLT_URL','bolt://neo4j:pass@neo4j-db:7687')
 
 # Other configs see https://medium.com/swlh/create-rest-api-with-django-and-neo4j-database-using-django-nemodel-1290da717df9
 NEOMODEL_SIGNALS = True
@@ -57,6 +62,7 @@ NEOMODEL_MAX_POOL_SIZE = 50
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
