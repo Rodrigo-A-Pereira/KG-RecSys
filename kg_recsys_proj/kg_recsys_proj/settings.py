@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-p1r$yumr4p$tkiqfouv1)0&+x=7nc2y#*czi_ig_g%f+%w@p=v
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost','backend']
 
 
 # Application definition
@@ -45,12 +45,15 @@ INSTALLED_APPS = [
     'corsheaders',
 ]
 
+print(os.environ.get('VUE_ORIGIN','http://vue-frontend:8080'))
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8080",
+    r"http://\.+:8080",
+    #os.environ.get('VUE_ORIGIN','http://vue-frontend:8080'),
+    'http://localhost:8080',
 ]
 
 # Get NEO4J_BOLT_URL environment variable, if none exits use default bolt://neo4j:neo4j@localhost:7687
-NEOMODEL_NEO4J_BOLT_URL = os.environ.get('NEO4J_BOLT_URL','bolt://neo4j:pass@neo4j-db:7687')
+NEOMODEL_NEO4J_BOLT_URL = os.environ.get('NEO4J_BOLT_URL','bolt://neo4j:pass@localhost:7687')
 
 # Other configs see https://medium.com/swlh/create-rest-api-with-django-and-neo4j-database-using-django-nemodel-1290da717df9
 NEOMODEL_SIGNALS = True

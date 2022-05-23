@@ -1,10 +1,31 @@
 version: '3'
 services:
 
+  vue-frontend:
+    build:
+      dockerfile: ./Vue_App.dockerfile
+    volumes:
+      - ./kg_recsys_proj_vue:/node/app
+    working_dir: /node/app
+    command: npm run serve
+    ports:
+      - "8080:8080"
+    depends_on: 
+      - django-backend
+    environment:
+      VUE_APP_DJANGO_ENDPOINT:  http://django-backend:8000 #http://django-backend:8000 
+
   django-backend:
     build:
-      dockerfile: ./Django_App.dockerfile 
-    command: python manage.py runserver 0.0.0.0:8000
+      dockerfile: ./Django_App.dockerfile
+    volumes:
+      - ./kg_recsys_proj:/code
+    working_dir: /code
+    command:  
+      sh -c "python manage.py install_labels &&
+             python manage.py makemigrations &&
+             python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
     ports:
       - "8000:8000"
     depends_on:
@@ -12,8 +33,10 @@ services:
         condition: service_healthy
 
     environment:
-      NEO4J_BOLT_URL: bolt://neo4j:pass@neo4j-db:7687
+      NEO4J_BOLT_URL: bolt://neo4j:pass@neo4j-db:7687 #bolt://neo4j:pass@db-bridge:7687
+      VUE_ORIGIN: http://vue-frontend:8080 #http://vue-frontend:8080 #
   
+
   neo4j-db:
     build:
       dockerfile: ./NeoDB.dockerfile 
@@ -30,4 +53,3 @@ services:
         interval: 10s
         timeout: 5s
         retries: 5
-  
