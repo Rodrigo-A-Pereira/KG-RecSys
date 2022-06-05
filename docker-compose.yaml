@@ -1,6 +1,30 @@
 version: '3'
 services:
 
+  ml-scheduler:
+    build: 
+      dockerfile: ./RetrainScheduler.dockerfile
+    volumes:
+      - ./ML_dir:/code/app
+    working_dir: /node/app
+    command: cron -f
+    depends_on:
+      - mlflow-server
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+    devices:
+      - /dev/nvidia0:/dev/nvidia0
+      - /dev/nvidiactl:/dev/nvidiactl
+      - /dev/nvidia-modeset:/dev/nvidia-modeset
+      - /dev/nvidia-uvm:/dev/nvidia-uvm
+      - /dev/nvidia-uvm-tools:/dev/nvidia-uvm-tools
+
   vue-frontend:
     build:
       dockerfile: ./Vue_App.dockerfile
@@ -20,6 +44,7 @@ services:
       dockerfile: ./Django_App.dockerfile
     volumes:
       - ./kg_recsys_proj:/code
+      - ./ML_dir:/ML_dir
     working_dir: /code
     command:  
       sh -c "python manage.py install_labels &&
@@ -30,6 +55,8 @@ services:
       - "8000:8000"
     depends_on:
       neo4j-db:
+        condition: service_healthy
+      mlflow-server:
         condition: service_healthy
 
     environment:
@@ -53,3 +80,23 @@ services:
         interval: 10s
         timeout: 5s
         retries: 5
+  
+  mlflow-server:
+    build:
+      dockerfile: ./MLFlowServer.dockerfile
+    volumes:
+      - ./MLFlowRegistry:/registry
+    working_dir: /registry
+    command: mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./artifacts --host 0.0.0.0
+    ports:
+      - "5000:5000"
+
+    healthcheck:
+      test: ["CMD", "echo"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    
+
+
+

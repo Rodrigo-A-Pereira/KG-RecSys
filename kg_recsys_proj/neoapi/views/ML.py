@@ -5,6 +5,7 @@ from neoapi.serializer import CardSerializerNeo, PersonSerializerNeo
 from neoapi.models import Card, Person
 from django.http import Http404
 import neomodel
+from neomodel import db
 
 
 class RecomendationList(APIView):
@@ -17,3 +18,14 @@ class RecomendationList(APIView):
         else:
             data_to_return =  card_serializer.data
         return Response(data_to_return)
+
+class TrainingFile(APIView):
+    def get(self, requests, format=None):
+        results, meta = db.cypher_query("MATCH (a:Person)-[:BOUGHT]->(b:Card) RETURN a.uid, b.code")
+
+        with open("/ML_dir/trainingFile.txt", "w") as file:
+                for r in results:
+                    file.write(f'{r[0]}\tBOUGHT\t{r[1]}\n')
+
+        return Response("Written in file ")
+        

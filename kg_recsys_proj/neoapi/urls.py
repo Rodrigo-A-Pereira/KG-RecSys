@@ -1,6 +1,6 @@
 from django.urls import include, path
 from rest_framework import routers
-from .views import CardViewSet, RecomendationList, buy_card
+from .views import CardViewSet, RecomendationList, TrainingFile, buy_card
 
 router = routers.DefaultRouter()
 router.register(r'card', CardViewSet, 'Card')
@@ -10,6 +10,7 @@ router.register(r'card', CardViewSet, 'Card')
 urlpatterns = [
     path('', include(router.urls)),
     path('recomendedCards/<slug:pid_slug>/', RecomendationList.as_view()),
-    path('buy_card/', buy_card
+    path('getTainingFile', TrainingFile.as_view()),
+    path('buy_card/', buy_card,
     ),
 ]
