@@ -5,11 +5,12 @@ services:
     build: 
       dockerfile: ./RetrainScheduler.dockerfile
     volumes:
-      - ./ML_dir:/code/app
-    working_dir: /node/app
+      - ./ML_dir:/ML_dir
+      - ./MLFlowRegistry:/MLFlowRegistry
+      - /home/rodrigo/Projects/KG-RecSys/PlayGround/pykeenMLFWrapper/PyKeenMLFlowWrapper:/pykeenMLFWrapper
     command: cron -f
-    depends_on:
-      - mlflow-server
+    environment:
+      MLFLOW_TRACKING_URI: http://mlflow-server:5000
     deploy:
       resources:
         reservations:
@@ -22,8 +23,8 @@ services:
       - /dev/nvidia0:/dev/nvidia0
       - /dev/nvidiactl:/dev/nvidiactl
       - /dev/nvidia-modeset:/dev/nvidia-modeset
-      - /dev/nvidia-uvm:/dev/nvidia-uvm
-      - /dev/nvidia-uvm-tools:/dev/nvidia-uvm-tools
+      #- /dev/nvidia-uvm:/dev/nvidia-uvm
+      #- /dev/nvidia-uvm-tools:/dev/nvidia-uvm-tools
 
   vue-frontend:
     build:
@@ -85,9 +86,9 @@ services:
     build:
       dockerfile: ./MLFlowServer.dockerfile
     volumes:
-      - ./MLFlowRegistry:/registry
-    working_dir: /registry
-    command: mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./artifacts --host 0.0.0.0
+      - ./MLFlowRegistry:/MLFlowRegistry
+    working_dir: /
+    command: mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root /MLFlowRegistry/artifacts --host 0.0.0.0 --port 5000
     ports:
       - "5000:5000"
 

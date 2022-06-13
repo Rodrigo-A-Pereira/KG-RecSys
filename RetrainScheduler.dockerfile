@@ -5,15 +5,16 @@ RUN apt-get -y update && apt-get -y upgrade
 RUN apt-get install -y cron
 
 RUN pip install pykeen
+RUN pip install git+https://github.com/Rodrigo-A-Pereira/PyKeenMLFlowWrapper
 
 RUN mkdir /code
 
 WORKDIR /code
-ADD ML_scheduler/ /code/
 
-RUN mkdir /nations_transe
+ADD ML_scheduler/ /code/
 
 COPY ML_scheduler/Crontab /etc/cron.d/cjob
 
 RUN chmod 0644 /etc/cron.d/cjob
-ENV PYTHONUNBUFFERED 1
+
+RUN touch /var/log/cron.log

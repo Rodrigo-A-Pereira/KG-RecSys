@@ -1,0 +1,2 @@
+*/10 * * * * root /usr/local/bin/python /code/trainModel.py
+# Empty line
