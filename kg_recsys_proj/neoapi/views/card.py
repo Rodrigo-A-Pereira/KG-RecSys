@@ -27,10 +27,19 @@ class CardViewSet(viewsets.ModelViewSet):
 class PersonViewSet(viewsets.ModelViewSet):
     serializer_class = PersonSerializerNeo
     lookup_field = "uid"
-    queryset = Person.nodes.all()
+    
+    def get_queryset(self):
+        name = self.request.query_params.get('name')
+        if name is not None:
+            return Person.nodes.filter(name__icontains=name).all()
+        else:
+            return Person.nodes.all()
 
     def get_object(self):
-        return Person.nodes.get(uid=self.kwargs[self.lookup_field])
+        try:
+            return Person.nodes.get(code=self.kwargs[self.lookup_field])
+        except neomodel.core.DoesNotExist:
+            raise Http404
 
 
 

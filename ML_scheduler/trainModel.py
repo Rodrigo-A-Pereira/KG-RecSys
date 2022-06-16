@@ -1,4 +1,3 @@
-
 import os
 try:
     import pykeen
@@ -7,6 +6,10 @@ try:
     from PykeenMLFlowWrapper import save_model
     import mlflow
     from mlflow.tracking import MlflowClient
+    import requests
+
+    response = requests.get(f"http://django-backend:8000/getTainingFile")
+    print(response)
 
     mlflow.set_tracking_uri("http://mlflow-server:5000")
     tracker = PythonResultTracker()

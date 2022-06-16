@@ -11,28 +11,31 @@ services:
     command: cron -f
     environment:
       MLFLOW_TRACKING_URI: http://mlflow-server:5000
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu]
-
-    devices:
-      - /dev/nvidia0:/dev/nvidia0
-      - /dev/nvidiactl:/dev/nvidiactl
-      - /dev/nvidia-modeset:/dev/nvidia-modeset
-      #- /dev/nvidia-uvm:/dev/nvidia-uvm
-      #- /dev/nvidia-uvm-tools:/dev/nvidia-uvm-tools
-
+    depends_on: 
+      - django-backend
+#    
+#      deploy:
+#      resources:
+#        reservations:
+#          devices:
+#            - driver: nvidia
+#              count: 1
+#              capabilities: [gpu]
+#
+#    devices:
+#      - /dev/nvidia0:/dev/nvidia0
+#      - /dev/nvidiactl:/dev/nvidiactl
+#      - /dev/nvidia-modeset:/dev/nvidia-modeset
+#      #- /dev/nvidia-uvm:/dev/nvidia-uvm
+#      #- /dev/nvidia-uvm-tools:/dev/nvidia-uvm-tools
+#
   vue-frontend:
     build:
       dockerfile: ./Vue_App.dockerfile
     volumes:
       - ./kg_recsys_proj_vue:/node/app
     working_dir: /node/app
-    command: npm run serve
+    command: bash -c "npm install && npm run serve" 
     ports:
       - "8080:8080"
     depends_on: 
@@ -46,6 +49,8 @@ services:
     volumes:
       - ./kg_recsys_proj:/code
       - ./ML_dir:/ML_dir
+      - ./MLFlowRegistry:/MLFlowRegistry
+
     working_dir: /code
     command:  
       sh -c "python manage.py install_labels &&
@@ -75,7 +80,7 @@ services:
       - ${HOME}/neo4j-compose2/data:/data
     environment:
         - NEO4J_AUTH=none
-
+    user: "${UID}:${GID}"
     healthcheck:
         test: ["CMD", "curl", "-f", "localhost:7474"]
         interval: 10s

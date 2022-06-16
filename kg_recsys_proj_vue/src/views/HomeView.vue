@@ -58,7 +58,7 @@ export default {
   methods:{
     getrecomendedCards(){
       axios
-        .get('/recomendedCards/1?max_len=20')
+        .get('/recomendedCards/409baf64cec64bef9fe3ac5e0baaaedb?max_len=20')
         .then(response => {
           console.log(response.data)
           this.recomendedCards = response.data

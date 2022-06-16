@@ -17,8 +17,14 @@
 
         <div class="navbar-end">
           <div class="navbar-item">
-            <router-link to="/" class="navbar-item"><i class="fas fa-shopping-cart"></i></router-link>
+            <UserDrop/>
           </div>
+           
+
+          
+          
+
+  
         </div>
 
       </div>
@@ -52,6 +58,7 @@
 <script>
 // @ is an alias to /src
 import axios from 'axios'
+import UserDrop from './components/UserDrop.vue'
 
 export default {
   name: 'App',
@@ -60,12 +67,15 @@ export default {
       name: null
       }
   },
+  components: {
+    UserDrop
+  },
 
   methods:{
     submit(){
       this.$router.push("/cardSearch?"+this.name);
     
-    }
+    },
   }
 
 }

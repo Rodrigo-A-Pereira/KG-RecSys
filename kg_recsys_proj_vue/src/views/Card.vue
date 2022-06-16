@@ -62,7 +62,7 @@ export default {
                 .post(
                     '/buy_card/',
                     {
-                        'uid':'223d150a9b1b4900a06c3484f79d3915',
+                        'uid':'04375983ff3649dda695435ea2f4e095',
                         'card_code': card_slug
                     } 
                 )

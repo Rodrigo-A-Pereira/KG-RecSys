@@ -6,6 +6,8 @@ RUN apt-get install -y cron
 
 RUN pip install pykeen
 RUN pip install git+https://github.com/Rodrigo-A-Pereira/PyKeenMLFlowWrapper
+RUN pip install requests
+
 
 RUN mkdir /code
 

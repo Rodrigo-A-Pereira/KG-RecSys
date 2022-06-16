@@ -1,3 +1,3 @@
-from .card import CardViewSet
+from .card import CardViewSet, PersonViewSet
 from .ML import RecomendationList, TrainingFile
 from .actions import buy_card

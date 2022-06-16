@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-p1r$yumr4p$tkiqfouv1)0&+x=7nc2y#*czi_ig_g%f+%w@p=v
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','backend']
+ALLOWED_HOSTS = ['localhost','backend', 'django-backend']
 
 
 # Application definition
@@ -49,6 +49,7 @@ print(os.environ.get('VUE_ORIGIN','http://vue-frontend:8080'))
 CORS_ALLOWED_ORIGINS = [
     r"http://\.+:8080",
     #os.environ.get('VUE_ORIGIN','http://vue-frontend:8080'),
+    'http://ml-scheduler',
     'http://localhost:8080',
 ]
 
