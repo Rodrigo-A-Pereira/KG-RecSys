@@ -9,7 +9,7 @@ In this project I intend to explore the use recent Machine Learning models based
 ### What is a knowledge graph?
 Knowledge graphs (KGs) are data structures, that allow to represent multi-relational and multi-class data simply by using nodes (real world entities) and edges (relations between nodes).
 
-(Insert Image)
+![](images/graph.png)
 
 ### Knowledge graph embeddings
 
