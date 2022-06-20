@@ -27,7 +27,7 @@ As this project is to serve as a proof of work, I developed a "demo" online stor
 
 ### Architecture
 
-(Insert image)
+![](images/KGREC.png)
 
 ## How to run
 
